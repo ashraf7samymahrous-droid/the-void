@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Void // الفراغ الرقمي</title>
+    <script src5="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap');
+        body { font-family: 'Tajawal', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#080808] text-neutral-400 h-screen flex flex-col justify-between p-6 md:p-12 select-none overflow-hidden">
+
+    <header class="flex justify-between items-center tracking-widest text-xs uppercase z-10">
+        <span class="text-white font-bold tracking-wider">The Void // 00</span>
+        <div class="space-x-4 space-x-reverse">
+            <button onclick="openBooking()" class="hover:text-white transition-colors duration-300 border-b border-neutral-700 pb-1">احجز الفراغ</button>
+            <button onclick="openAdmin()" class="text-neutral-700 hover:text-neutral-400 transition-colors">⚙️</button>
+        </div>
+    </header>
+
+    <main id="main-container" class="text-center space-y-6 my-auto z-10 transition-all duration-700">
+        <div id="void-content">
+            <p class="text-xs md:text-sm font-light tracking-widest text-neutral-500 mb-2">هذه المساحة فارغة تماماً.</p>
+            <h1 class="text-2xl md:text-5xl font-light text-white tracking-tight leading-relaxed">لا شيء يُعرض هنا. قصداً.</h1>
+            <div class="pt-10">
+                <span class="text-[10px] md:text-xs uppercase tracking-widest text-neutral-600 block mb-3">الإعلان القادم يظهر خلال</span>
+                <div id="countdown" class="text-xl md:text-3xl font-mono text-white tracking-widest">04 : 12 : 55 : 00</div>
+            </div>
+        </div>
+        
+        <div id="ad-container" class="hidden max-w-2xl mx-auto bg-neutral-900 border border-neutral-800 p-8 rounded-lg shadow-2xl">
+            <img id="ad-image" src="" alt="Active Ad" class="max-h-96 mx-auto mb-6 object-contain">
+            <p id="ad-text" class="text-white text-lg font-light tracking-wide"></p>
+        </div>
+    </main>
+
+    <footer class="flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-widest text-neutral-600 z-10 gap-2">
+        <p>مساحة واحدة. علامة تجارية واحدة. انتباه كامل.</p>
+        <p id="current-status" class="text-neutral-500">الحالة: الفراغ مُهيمن</p>
+    </footer>
+
+    <div id="booking-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden justify-center items-center z-50 p-4">
+        <div class="bg-[#121212] border border-neutral-800 p-8 max-w-md w-full rounded-xl space-y-6 relative">
+            <button onclick="closeBooking()" class="absolute top-4 left-4 text-neutral-500 hover:text-white">✕</button>
+            <h2 class="text-white text-xl font-light tracking-wide">طلب حجز الفراغ</h2>
+            <p class="text-xs text-neutral-400">هذه المساحة لا تُباع لمن يدفع أكثر، بل لمن يجرؤ على ملئها بثقة.</p>
+            <form onsubmit="submitBooking(event)" class="space-y-4">
+                <input type="text" placeholder="اسم الشركة / العلامة التجارية" required class="w-full bg-neutral-900 border border-neutral-800 rounded p-3 text-sm text-white focus:outline-none focus:border-neutral-500">
+                <input type="email" placeholder="البريد الإلكتروني لمدير التسويق" required class="w-full bg-neutral-900 border border-neutral-800 rounded p-3 text-sm text-white focus:outline-none focus:border-neutral-500">
+                <textarea placeholder="لماذا تستحق شركتك هذه المساحة الخالية وحدها؟" rows="3" required class="w-full bg-neutral-900 border border-neutral-800 rounded p-3 text-sm text-white focus:outline-none focus:border-neutral-500"></textarea>
+                <button type="submit" class="w-full bg-white text-black font-semibold py-3 rounded text-xs uppercase tracking-widest hover:bg-neutral-200 transition-colors">إرسال طلب الجرأة</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="admin-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden justify-center items-center z-50 p-4">
+        <div class="bg-[#121212] border border-neutral-800 p-8 max-w-md w-full rounded-xl space-y-6 relative">
+            <button onclick="closeAdmin()" class="absolute top-4 left-4 text-neutral-500 hover:text-white">✕</button>
+            <h2 class="text-white text-xl font-light tracking-wide">لوحة تحكم الفراغ (Admin)</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs text-neutral-400 block mb-1">رابط صورة الإعلان (URL)</label>
+                    <input type="text" id="admin-img-input" placeholder="https://example.com/logo.png" class="w-full bg-neutral-900 border border-neutral-800 rounded p-3 text-sm text-white focus:outline-none">
+                </div>
+                <div>
+                    <label class="text-xs text-neutral-400 block mb-1">النص الترويجي للإعلان</label>
+                    <input type="text" id="admin-text-input" placeholder="مثال: وحدنا نمتلك المشهد اليوم." class="w-full bg-neutral-900 border border-neutral-800 rounded p-3 text-sm text-white focus:outline-none">
+                </div>
+                <div class="flex gap-4 pt-2">
+                    <button onclick="activateAd()" class="w-1/2 bg-white text-black font-semibold py-3 rounded text-xs uppercase tracking-widest hover:bg-neutral-200">عرض الإعلان</button>
+                    <button onclick="resetToVoid()" class="w-1/2 bg-neutral-800 text-white font-semibold py-3 rounded text-xs uppercase tracking-widest hover:bg-neutral-700">إعادة الفراغ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // التحكم بالنوافذ المنبثقة
+        function openBooking() { document.getElementById('booking-modal').classList.remove('hidden'); document.getElementById('booking-modal').classList.add('flex'); }
+        function closeBooking() { document.getElementById('booking-modal').classList.add('hidden'); document.getElementById('booking-modal').classList.remove('flex'); }
+        
+        function openAdmin() { document.getElementById('admin-modal').classList.remove('hidden'); document.getElementById('admin-modal').classList.add('flex'); }
+        function closeAdmin() { document.getElementById('admin-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.remove('flex'); }
+
+        function submitBooking(e) {
+            e.preventDefault();
+            alert('تم استلام طلبك بنجاح. سيتم مراجعة مدى "جرأة" علامتك التجارية.');
+            closeBooking();
+        }
+
+        // تفعيل الإعلان من لوحة التحكم
+        function activateAd() {
+            const imgSrc = document.getElementById('admin-img-input').value;
+            const adText = document.getElementById('admin-text-input').value;
+
+            if(!imgSrc && !adText) {
+                alert('الرجاء إدخال رابط الصورة أو النص على الأقل.');
+                return;
+            }
+
+            document.getElementById('void-content').classList.add('hidden');
+            const adContainer = document.getElementById('ad-container');
+            adContainer.classList.remove('hidden');
+
+            if(imgSrc) {
+                document.getElementById('ad-image').src = imgSrc;
+                document.getElementById('ad-image').classList.remove('hidden');
+            } else {
+                document.getElementById('ad-image').classList.add('hidden');
+            }
+
+            document.getElementById('ad-text').innerText = adText;
+            document.getElementById('current-status').innerText = "الحالة: تم كسر الفراغ (معلن نشط)";
+            closeAdmin();
+        }
+
+        // إرجاع الشاشة إلى الفراغ التام
+        function resetToVoid() {
+            document.getElementById('ad-container').classList.add('hidden');
+            document.getElementById('void-content').classList.remove('hidden');
+            document.getElementById('current-status').innerText = "الحالة: الفراغ مُهيمن";
+            closeAdmin();
+        }
+
+        // محاكاة العداد التنازلي البسيط
+        let time = 3600 * 4 + 12 * 60; // 4 ساعات و 12 دقيقة
+        setInterval(() => {
+            if(time > 0) time--;
+            let hours = String(Math.floor(time / 3600)).padStart(2, '0');
+            let minutes = String(Math.floor((time % 3600) / 60)).padStart(2, '0');
+            let seconds = String(time % 60).padStart(2, '0');
+            document.getElementById('countdown').innerText = `04 : ${hours} : ${minutes} : ${seconds}`;
+        }, 1000);
+    </script>
+</body>
+</html>
